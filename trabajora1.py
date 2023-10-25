@@ -22,31 +22,6 @@ def main():
 
         if opcion == "1":
             print("Has seleccionado la Opción 1")
-            import time
-
-            def my_process():
-                     while True:
-                      print("Running...")
-                     time.sleep(1)
-
-            if __name__ == '__main__':
-                   process = multiprocessing.Process(target=my_process)
-                   process.start()
-                   time.sleep(5)
-                   process.terminate()
-            # Aquí puedes poner el código relacionado con la Opción 1
-            def print_process_name():
-              print(multiprocessing.current_process().name)
-
-            if __name__ == '__main__':
-                  processes = []
-            for i in range(4):
-               process = multiprocessing.Process(target=print_process_name)
-               processes.append(process)
-               process.start()
-
-            for process in processes:
-               process.join()
         elif opcion == "2":
             print("Has seleccionado la Opción 2")
             # Aquí puedes poner el código relacionado con la Opción 2
@@ -54,9 +29,8 @@ def main():
             print('4')
         elif opcion == "4":
             print("Has seleccionado la Opción 4")
-            break
         elif opcion == "5": 
-            print("Has seleccionado la Opción 5")
+            print("FIN DEL PROGRAMA")
             break
         else:
             print("Opción no válida. Por favor, elige una opción válida.")
