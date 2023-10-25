@@ -1,12 +1,26 @@
 import shutil
 from multiprocessing import Process
 import multiprocessing
+from multiprocessing import Value
+resultado_compartido = Value('i', 0)
+
+def sumar(x,y,resultado):
+    resultado.value = x + y
+
+def restar(x,y, resultado):
+    resultado.value = x - y
+
+def mul(x,y, resultado):
+    resultado.value = x * y
+
+def div(x,y,resultado ):
+    resultado.value = x / y
 
 def is_par(x):
     if x/2==0:
-        print('%s es par' %(x))
+        return True
     else: 
-        print('%s es impar' %(x))
+        return False
 
 def mostrar_menu():
     print("1) Operaciones Básicas (+,-,x,/) | esPar? | esPrimo?")
@@ -16,9 +30,34 @@ def main():
     while True:
         mostrar_menu()
         opcion = input("Elige una opción: ")
-
         if opcion == "1":
-            print("Has seleccionado la Opción 1")
+            p1 = Process(target=sumar, args=(numero1,numero2, resultado_compartido))
+            p2 = Process(target=restar, args=(numero1,numero2, resultado_compartido))
+            p3 = Process(target=mul, args=(numero1,numero2, resultado_compartido))
+            p4 = Process(target=div, args=(numero1,numero2, resultado_compartido))
+            p1.start()
+            p1.join()
+            resultado = resultado_compartido.value
+            p2.start()
+            p3.start()
+            p4.start()
+            data = [
+                ["Operación", "Edad", "Ciudad"],
+                ["Suma: "+str(resultado), "Edad", "Ciudad"],
+                [p2.join(), 25, "Nueva York"],
+                [p3.join(), 30, "Los Ángeles"],
+                [p4.join(), 22, "Chicago"]
+            ]
+            # Encabezados
+            print(data[0][0], data[0][1], data[0][2])
+
+            # Línea separadora
+            print("-" * 40)
+
+            # Filas de datos
+            for row in data[1:]:
+                print(row[0], row[1], row[2])
+                    
         elif opcion == "2":
             print("Has seleccionado la Opción 2")
             # Aquí puedes poner el código relacionado con la Opción 2
@@ -33,4 +72,6 @@ def main():
             print("Opción no válida. Por favor, elige una opción válida.")
 
 if __name__ == "__main__":
+    numero1=int(input("Introduce un número: "))
+    numero2=int(input("Introduce un número: "))
     main()
