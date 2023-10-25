@@ -14,7 +14,7 @@ def mul(x,y, resultado):
     resultado.value = x * y
 
 def div(x,y, resultado ):
-    resultado.value= x/y
+    resultado.value= x//y
 
 def is_par(x):
     if x/2==0:
@@ -49,7 +49,7 @@ def main():
             resultado4 = resultado_compartido.value 
             data = [
                 ["Operación", "Edad", "Ciudad"],
-                ["Suma: "+str(resultado), "Edad", "Ciudad"],
+                ["Suma: "+str(resultado), 30, "Londres"],
                 ["Resta: "+str(resultado2), 25, "Nueva York"],
                 ["Mult.: "+str(resultado3), 30, "Los Ángeles"],
                 ["División: "+str(resultado4), 22, "Chicago"]
@@ -58,7 +58,7 @@ def main():
             print(data[0][0], data[0][1], data[0][2])
 
             # Línea separadora
-            print("-" * 40)
+            print("-" * 30)
 
             # Filas de datos
             for row in data[1:]:
