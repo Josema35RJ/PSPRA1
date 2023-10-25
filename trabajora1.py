@@ -9,11 +9,8 @@ def is_par(x):
         print('%s es impar' %(x))
 
 def mostrar_menu():
-    print("1) SUMA | esPar? | esPrimo?")
-    print("2) RESTA | esPar? | esPrimo?")
-    print("3) MULTIPLICACIÓN | esPar? | esPrimo?")
-    print("4) DIVISIÓN | esPar? | esPrimo?")
-    print("5) Salir")
+    print("1) Operaciones Básicas (+,-,x,/) | esPar? | esPrimo?")
+    print("4) Salir")
 
 def main():
     while True:
