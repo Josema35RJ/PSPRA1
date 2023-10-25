@@ -2,17 +2,23 @@ import shutil
 from multiprocessing import Process
 import multiprocessing
 
+def is_par(x):
+    if x/2==0:
+        print('%s es par' %(x))
+    else: 
+        print('%s es impar' %(x))
 
 
 def mostrar_menu():
-    print("1) SUMA | esPar? | esPrimo?")
-    print("2) RESTA | esPar? | esPrimo?")
-    print("3) MULTIPLICACIÓN | esPar? | esPrimo?")
-    print("4) DIVISIÓN | esPar? | esPrimo?")
+    print("1) SUMA | espar? | esprimo?")
+    print("2) INICIO PROCESO")
+    print("3) MOSTRAR PROCESO (EN EJECUCION)")
+    print("4) CAMBIAR ESTADO DE PROCESO")
     print("5) Salir")
 
 def main():
     while True:
+        is_par(5)
         mostrar_menu()
         opcion = input("Elige una opción: ")
 
