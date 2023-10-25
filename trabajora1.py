@@ -2,7 +2,11 @@ import shutil
 from multiprocessing import Process
 import multiprocessing
 
-
+def is_par(x):
+    if x/2==0:
+        print('%s es par' %(x))
+    else: 
+        print('%s es impar' %(x))
 
 def mostrar_menu():
     print("1) SUMA | esPar? | esPrimo?")
