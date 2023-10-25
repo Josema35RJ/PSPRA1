@@ -13,8 +13,8 @@ def restar(x,y, resultado):
 def mul(x,y, resultado):
     resultado.value = x * y
 
-def div(x,y,resultado ):
-    resultado.value = x / y
+def div(x,y, resultado ):
+    resultado.value= x/y
 
 def is_par(x):
     if x/2==0:
@@ -39,14 +39,20 @@ def main():
             p1.join()
             resultado = resultado_compartido.value
             p2.start()
+            p2.join()
+            resultado2 = resultado_compartido.value
             p3.start()
+            p3.join()
+            resultado3 = resultado_compartido.value
             p4.start()
+            p4.join()
+            resultado4 = resultado_compartido.value 
             data = [
                 ["Operación", "Edad", "Ciudad"],
                 ["Suma: "+str(resultado), "Edad", "Ciudad"],
-                [p2.join(), 25, "Nueva York"],
-                [p3.join(), 30, "Los Ángeles"],
-                [p4.join(), 22, "Chicago"]
+                ["Resta: "+str(resultado2), 25, "Nueva York"],
+                ["Mult.: "+str(resultado3), 30, "Los Ángeles"],
+                ["División: "+str(resultado4), 22, "Chicago"]
             ]
             # Encabezados
             print(data[0][0], data[0][1], data[0][2])
