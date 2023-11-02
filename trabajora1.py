@@ -90,8 +90,10 @@ def ImagenRotacion(imagen3):
     img.show()
 
 def mostrar_menu():
+    print("OPERACIONES NUMÉRICAS")
     print("1) Operaciones Básicas (+,-,x,/) | esPar? | esPrimo?")
     print("2) Potencia, Raiz, Factorial de una lista de Numeros")
+    print("OPERACIONES CON IMAGEN")
     print("3) Invertir color pixel de Imagen")
     print("4) Procesos en Imagenes")
     print("5) Salir")
@@ -159,11 +161,11 @@ def main():
               #Array de varias Imagenes
               p1 = Process(target=EscaladoImagen, args=("camaro.jpg",))
               time.sleep(2)
-              p2 = Process(target=ImagenNitidez, args=("Escaladocamaro.jpg",))
+              p2 = Process(target=ImagenNitidez, args=("camaro.jpg",))
               time.sleep(2)
-              p3 = Process(target=ConstrasteImagen, args=("NitidezEscaladocamaro.jpg",))
+              p3 = Process(target=ConstrasteImagen, args=("camaro.jpg",))
               time.sleep(2)
-              p4 = Process(target=ImagenRotacion, args=("ContrasteNitidezEscaladocamaro.jpg",))
+              p4 = Process(target=ImagenRotacion, args=("camaro.jpg",))
               
 
               p1.start()
