@@ -24,6 +24,19 @@ def mul(x,y, resultado):
 def div(x,y, resultado ):
     resultado.value= x//y
     
+def is_par(x):
+    if x % 2 ==0:
+        print(f'{x} es PAR')
+    else: 
+        print(f'{x} es IMPAR')
+
+def es_primo(x):
+    for n in range(2, x):
+        if x % n == 0:
+            print(f'{x} NO es primo')
+            return False
+    print(f'{x} SI es primo')
+    return True
 def invert_color(pixel):
     r, g, b = pixel
     return 255 - r, 255 - g, 255 - b
@@ -46,12 +59,7 @@ def process_image(image_path):
     result_image = Image.fromarray(result.astype('uint8'))
     result_image.save('imagen_mejorada.jpg')
 
-def is_par(x):
-    if x/2==0:
-        return True
-    else: 
-        return False
-    
+
 def cuadrado(x):
         print('%s al cuadrado es %s' % (x, int(x)**2))
 
@@ -62,7 +70,7 @@ def factorial (x):
         resultado = 1 
         for i in range(1, int(x) + 1):
          resultado *= i
-        print('%s su factorial es ' + str(resultado))
+        print('%s su factorial es  ' %(x) + str(resultado))
         
 def EscaladoImagen(imagen):
     img = Image.open(imagen)
@@ -121,6 +129,7 @@ def main():
             p4.start()
             p4.join()
             resultado4 = resultado_compartido.value 
+            resultados = [resultado, resultado2, resultado3, resultado4]
             data = [
                 ["Operaciones Básicas (+,-,*,/)"],
                 ["Suma: "+str(resultado)],
@@ -137,14 +146,26 @@ def main():
             # Filas de datos
             for row in data[1:]:
                 print(row[0])
-                    
+            
+            
+            print("¿Es el resultado par?")   
+            for x in resultados:               
+                p5 = Process(target=is_par, args=(x,))
+                p5.start()
+                p5.join()
+                
+            print("¿Es el resultado primo?")   
+            for x in resultados:               
+                p6 = Process(target=es_primo, args=(x,))
+                p6.start()
+                p6.join()
         elif opcion == "2":
             numeros = [3, 8, 5, 8, 4, 2]
             for x in numeros:
-             print('    Potencia y Raiz de ', x)
-             p1 = Process(target=cuadrado, args=(str(x)))
-             p2 = Process(target=raiz, args=(str(x)))
-             p3 = Process(target=factorial, args=(str(x)))
+             print('Potencia y Raiz de ', x)
+             p1 = Process(target=cuadrado, args=(x,))
+             p2 = Process(target=raiz, args=(x,))
+             p3 = Process(target=factorial, args=(x,))
 
              p1.start()
              p2.start()
