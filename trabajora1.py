@@ -62,7 +62,7 @@ def factorial (x):
         resultado = 1 
         for i in range(1, int(x) + 1):
          resultado *= i
-         print('%s su factorial es ' + str(resultado))
+        print('%s su factorial es ' + str(resultado))
         
 def EscaladoImagen(imagen):
     img = Image.open(imagen)
@@ -120,21 +120,21 @@ def main():
             p4.join()
             resultado4 = resultado_compartido.value 
             data = [
-                ["Operación", "Edad", "Ciudad"],
-                ["Suma: "+str(resultado), 30, "Londres"],
-                ["Resta: "+str(resultado2), 25, "Nueva York"],
-                ["Mult.: "+str(resultado3), 30, "Los Ángeles"],
-                ["División: "+str(resultado4), 22, "Chicago"]
+                ["Operaciones Básicas (+,-,*,/)"],
+                ["Suma: "+str(resultado)],
+                ["Resta: "+str(resultado2)],
+                ["Mult.: "+str(resultado3), ],
+                ["División: "+str(resultado4)]
             ]
             # Encabezados
-            print(data[0][0], data[0][1], data[0][2])
+            print(data[0][0])
 
             # Línea separadora
             print("-" * 30)
 
             # Filas de datos
             for row in data[1:]:
-                print(row[0], row[1], row[2])
+                print(row[0])
                     
         elif opcion == "2":
             numeros = [3, 8, 5, 8, 4, 2]
