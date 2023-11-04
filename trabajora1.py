@@ -1,17 +1,14 @@
-import shutil
 from multiprocessing import Process, Value, Pool
 import multiprocessing
 from PIL import Image, ImageEnhance, ImageFilter
-import time
 import numpy as np
 
 
 resultado_compartido = Value('i', 0)
 listEscalado = ["imagem_2023_04_30_22184991439.jpg"]
-listNitidez = ['']
-listConstraste = ['']
-listRotacion = ['']
+listimages = ["camaro.jpg", "mclaren.jpg", "MustangDemon.jpg"]
 
+#--------------------------OPCION 1 MENU-----------------------
 def sumar(x,y,resultado):
     resultado.value = x + y
 
@@ -37,28 +34,9 @@ def es_primo(x):
             return False
     print(f'{x} SI es primo')
     return True
-def invert_color(pixel):
-    r, g, b = pixel
-    return 255 - r, 255 - g, 255 - b
 
-def process_image(image_path):
-    # Cargar la imagen
-    image = Image.open("camaro.jpg")
-    image = np.array(image)
-
-    # Crear un objeto Pool
-    pool = Pool()
-
-    # Aplicar el filtro de inversión de color a cada pixel de la imagen
-    result = pool.map(invert_color, [pixel for row in image for pixel in row])
-
-    # Reshape del resultado para que tenga la misma estructura que la imagen original
-    result = np.array(result).reshape(image.shape)
-
-    # Convertir el resultado a una imagen y guardarla
-    result_image = Image.fromarray(result.astype('uint8'))
-    result_image.save('imagen_mejorada.jpg')
-
+#-------------------------------------------------------------------
+#---------------------------OPCION 2  MENU---------------------------
 
 def cuadrado(x):
         print('%s al cuadrado es %s' % (x, int(x)**2))
@@ -72,31 +50,60 @@ def factorial (x):
          resultado *= i
         print('%s su factorial es  ' %(x) + str(resultado))
         
+#------------------------------------------------------------------
+#-----------------------OCPION 3 MENU-----------------------------
+def invert_color(pixel):
+    r, g, b = pixel #Extraemos de cada pixel  los componentes r, g,b (colores primarios)
+    return 255 - r, 255 - g, 255 - b #Aplicamos a cada uno resta de 255 para invertirlos
+
+    # Crear un objeto Pool
+    pool = Pool()
+
+    # Aplicamos el metodo de inversion de color a cada pixel de la imagen
+    result = pool.map(invert_color, [pixel for row in image for pixel in row]) #Hacemos de la matrix un objeto plano, en una lista unidimensional de píxeles
+    #Para que realizamos esto simplemente para mejorar el rendimiento y hacerlo mas facil, ademas de esto para hacer el metodo mas compatible ya que por ejemplo
+    #esta libreria Pil necesita que le llegue asi los datos para trabajar
+
+    # Reeordenamos todo el array para que salga la imagen igual
+    result = np.array(result).reshape(image.shape)
+
+    # Convertimos el resultado a una imagen y guardarla
+    result_image = Image.fromarray(result.astype('uint8')) #Aqui convertirmos los valores de los elementos de la matriz (los pixeles con valores de  0 y 2551) a enteros normales
+    result_image.save('imagen_mejorada.jpg')
+
+#--------------------------------------------------------------------
+#-----------------------OPCION 4 MENU------------------------------
+def process_image(image_path):
+    # Cargar la imagen
+    image = Image.open("camaro.jpg")
+    image = np.array(image)
+    
 def EscaladoImagen(imagen):
     img = Image.open(imagen)
+    #Reescalamos las imagenes
     img.resize((2160,1440))
     img.save('Escalado' + imagen)
-    listNitidez.append(img)
     
 def ImagenNitidez(imagen1):
     img = Image.open(imagen1)
+    #Mejoramos la nitidez de la imagen
     imgnitida = img.filter(ImageFilter.SHARPEN)
     imgnitida.save('Nitidez'+ imagen1)
-    listConstraste.append(imgnitida)
 
 def ConstrasteImagen(imagen2):
     img = Image.open(imagen2)
+    #Aplicamos contraste a la imagen
     imgmejorada =ImageEnhance.Contrast(img)
+    #Mejoradas la imagen en 1.4 para que se vea mejor, depues del contraste aplicado antes
     imgmejorada2 =imgmejorada.enhance(1.4)
     imgmejorada2.save('Contraste'+ imagen2)
-    listRotacion.append(imgmejorada2)
 
 def ImagenRotacion(imagen3):
     img = Image.open(imagen3)
+    #Aplicamos una rotacion a cada imagen
     img = img.rotate(20)
     img.save('Final'+ imagen3)
-    img.show()
-
+#------------------------------------------------------------------
 def mostrar_menu():
     print("OPERACIONES NUMÉRICAS")
     print("1) Operaciones Básicas (+,-,x,/) | esPar? | esPrimo?")
@@ -160,6 +167,7 @@ def main():
                 p6.start()
                 p6.join()
         elif opcion == "2":
+            #Realizamos calculos un poco mas complejos que antes a los numeros de un array
             numeros = [3, 8, 5, 8, 4, 2]
             for x in numeros:
              print('Potencia y Raiz de ', x)
@@ -177,27 +185,28 @@ def main():
              
              print('-------------------------------------------')
         elif opcion == "3":
-            process_image("camaro.jpg")
+            #En esta opcion cogemos varias imagenes y le realizamos una inversion de color a cada pixel
+            for image in listimages:
+             process_image(image)
         elif opcion == "4":
-              #Array de varias Imagenes
-              p1 = Process(target=EscaladoImagen, args=("camaro.jpg",))
-              time.sleep(2)
-              p2 = Process(target=ImagenNitidez, args=("camaro.jpg",))
-              time.sleep(2)
-              p3 = Process(target=ConstrasteImagen, args=("camaro.jpg",))
-              time.sleep(2)
-              p4 = Process(target=ImagenRotacion, args=("camaro.jpg",))
+              #En esta opcion cogemos varias imagenes y aplicamos en cada proceso un filtro o cambio al mismo tiempo
+              #una vez terminen se guardaran con el filtro aplicado al nombre del archivo
+              for image in listimages:
+               p1 = Process(target=EscaladoImagen, args=(image,))
+               p2 = Process(target=ImagenNitidez, args=(image,))
+               p3 = Process(target=ConstrasteImagen, args=(image,))
+               p4 = Process(target=ImagenRotacion, args=(image,))
               
 
-              p1.start()
-              p2.start()
-              p3.start()
-              p4.start()
+               p1.start()
+               p2.start()
+               p3.start()
+               p4.start()
 
-              p1.join()
-              p2.join()
-              p3.join()
-              p4.join()
+               p1.join()
+               p2.join()
+               p3.join()
+               p4.join()
          
         elif opcion == "5": 
             print("FIN DEL PROGRAMA")
