@@ -82,7 +82,16 @@ def process_image(image_path):
     
 #--------------------------------------------------------------------
 #-----------------------OPCION 4 MENU------------------------------
-
+def LucesImagen (imagen):
+    img = Image.open(imagen)
+    img = ImageEnhance.Brightness(img).enhance(2)
+    try:
+        os.mkdir('imagenesAluces')
+    except OSError as e:
+        if e.errno != errno.EEXIST:
+            raise
+    img.save("imagenesAluces/Aluces"+imagen)
+    
 def EscaladoImagen(imagen):
     img = Image.open(imagen)
     #Reescalamos las imagenes
@@ -250,17 +259,19 @@ def main():
                p2 = Process(target=ImagenNitidez, args=(image,))
                p3 = Process(target=ConstrasteImagen, args=(image,))
                p4 = Process(target=ImagenRotacion, args=(image,))
-              
+               p5 = Process(target=LucesImagen, args=(image,))
 
                p1.start()
                p2.start()
                p3.start()
                p4.start()
+               p5.start()
 
                p1.join()
                p2.join()
                p3.join()
                p4.join()
+               p5.join()
          
         elif opcion == "5": 
             print("FIN DEL PROGRAMA")
