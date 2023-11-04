@@ -2,6 +2,8 @@ from multiprocessing import Process, Value, Pool
 import multiprocessing
 from PIL import Image, ImageEnhance, ImageFilter
 import numpy as np
+import os
+import errno
 
 resultado_compartido = Value('i', 0)
 listimages = ["camaro.jpg", "mclaren.jpg", "MustangDemon.jpg"]
@@ -71,7 +73,12 @@ def process_image(image_path):
 
     # Convertimos el resultado a una imagen y guardarla
     result_image = Image.fromarray(result.astype('uint8')) #Aqui convertirmos los valores de los elementos de la matriz (los pixeles con valores de  0 y 2551) a enteros normales
-    result_image.save('imagen_mejorada.jpg'+ image_path)
+    try:
+        os.mkdir('imagenescolorinvertido')
+    except OSError as e:
+        if e.errno != errno.EEXIST:
+            raise
+    result_image.save('imagenescolorinvertido/imagen_colorivertido'+ image_path)
     
 #--------------------------------------------------------------------
 #-----------------------OPCION 4 MENU------------------------------
@@ -80,13 +87,23 @@ def EscaladoImagen(imagen):
     img = Image.open(imagen)
     #Reescalamos las imagenes
     img.resize((2160,1440))
-    img.save('Escalado' + imagen)
+    try:
+        os.mkdir('imagenesescaladas')
+    except OSError as e:
+        if e.errno != errno.EEXIST:
+            raise
+    img.save('imagenesescaladas/Escalado' + imagen)
     
 def ImagenNitidez(imagen1):
     img = Image.open(imagen1)
     #Mejoramos la nitidez de la imagen
     imgnitida = img.filter(ImageFilter.SHARPEN)
-    imgnitida.save('Nitidez'+ imagen1)
+    try:
+        os.mkdir('imagenesnitidas')
+    except OSError as e:
+        if e.errno != errno.EEXIST:
+            raise
+    imgnitida.save('imagenesnitidas/Nitidez'+ imagen1)
 
 def ConstrasteImagen(imagen2):
     img = Image.open(imagen2)
@@ -94,13 +111,23 @@ def ConstrasteImagen(imagen2):
     imgmejorada =ImageEnhance.Contrast(img)
     #Mejoradas la imagen en 1.4 para que se vea mejor, depues del contraste aplicado antes
     imgmejorada2 =imgmejorada.enhance(1.4)
-    imgmejorada2.save('Contraste'+ imagen2)
+    try:
+        os.mkdir('imagenescontrastadas')
+    except OSError as e:
+        if e.errno != errno.EEXIST:
+            raise
+    imgmejorada2.save('imagenescontrastadas/Contraste'+ imagen2)
 
 def ImagenRotacion(imagen3):
     img = Image.open(imagen3)
     #Aplicamos una rotacion a cada imagen
     img = img.rotate(20)
-    img.save('Final'+ imagen3)
+    try:
+        os.mkdir('imagenesrotadas')
+    except OSError as e:
+        if e.errno != errno.EEXIST:
+            raise
+    img.save('imagenesrotadas/Rotada'+ imagen3)
 #------------------------------------------------------------------
 def mostrar_menu():
     print("OPERACIONES NUMÉRICAS")
@@ -184,17 +211,36 @@ def main():
              print('-------------------------------------------')
         elif opcion == "3":
             #En esta opcion cogemos varias imagenes y le realizamos una inversion de color a cada pixel
-              p1 = Process(target=process_image, args=(listimages[0],))
-              p2 = Process(target=process_image, args=(listimages[1],))
-              p3 = Process(target=process_image, args=(listimages[2],))
-             
-              p1.start()
-              p2.start()
-              p3.start()
-        
-              p1.join()
-              p2.join()
-              p3.join()
+                p1 = Process(target=process_image, args=(listimages[0],))
+                p2 = Process(target=process_image, args=(listimages[1],))
+                p3 = Process(target=process_image, args=(listimages[2],))
+                
+                p1.start()
+                p2.start()
+                p3.start()
+            
+                p1.join()
+                p2.join()
+                p3.join()
+                while True:
+                    opcion = input("Elige una opción (1. Camaro 2.Mclaren 3.Mustang 4.Salir):")
+                    if opcion == "1":
+                        Imagen1=Image.open("imagenescolorinvertido/imagen_colorivertidocamaro.jpg")
+                        Imagen1.show()
+                    elif opcion == "2":
+                        Imagen2=Image.open("imagenescolorinvertido/imagen_colorivertidomclaren.jpg")
+                        Imagen2.show()
+                    elif opcion == "3":
+                        Imagen3=Image.open("imagenescolorinvertido/imagen_colorivertidoMustangDemon.jpg")
+                        Imagen3.show()
+                    elif opcion == "4": 
+                        print("VUELTA AL MENÚ")
+                        break
+                    else:
+                        print("Opción no válida. Por favor, elige una opción válida.")
+
+                    
+                    
                
         elif opcion == "4":
               #En esta opcion cogemos varias imagenes y aplicamos en cada proceso un filtro o cambio al mismo tiempo
