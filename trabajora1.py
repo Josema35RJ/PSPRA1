@@ -3,9 +3,7 @@ import multiprocessing
 from PIL import Image, ImageEnhance, ImageFilter
 import numpy as np
 
-
 resultado_compartido = Value('i', 0)
-listEscalado = ["imagem_2023_04_30_22184991439.jpg"]
 listimages = ["camaro.jpg", "mclaren.jpg", "MustangDemon.jpg"]
 
 #--------------------------OPCION 1 MENU-----------------------
@@ -56,7 +54,11 @@ def invert_color(pixel):
     r, g, b = pixel #Extraemos de cada pixel  los componentes r, g,b (colores primarios)
     return 255 - r, 255 - g, 255 - b #Aplicamos a cada uno resta de 255 para invertirlos
 
-    # Crear un objeto Pool
+def process_image(image_path):
+    # Cargar la imagen
+    image = Image.open(image_path)
+    image = np.array(image)
+     # Crear un objeto Pool
     pool = Pool()
 
     # Aplicamos el metodo de inversion de color a cada pixel de la imagen
@@ -69,15 +71,11 @@ def invert_color(pixel):
 
     # Convertimos el resultado a una imagen y guardarla
     result_image = Image.fromarray(result.astype('uint8')) #Aqui convertirmos los valores de los elementos de la matriz (los pixeles con valores de  0 y 2551) a enteros normales
-    result_image.save('imagen_mejorada.jpg')
-
+    result_image.save('imagen_mejorada.jpg'+ image_path)
+    
 #--------------------------------------------------------------------
 #-----------------------OPCION 4 MENU------------------------------
-def process_image(image_path):
-    # Cargar la imagen
-    image = Image.open("camaro.jpg")
-    image = np.array(image)
-    
+
 def EscaladoImagen(imagen):
     img = Image.open(imagen)
     #Reescalamos las imagenes
@@ -186,8 +184,18 @@ def main():
              print('-------------------------------------------')
         elif opcion == "3":
             #En esta opcion cogemos varias imagenes y le realizamos una inversion de color a cada pixel
-            for image in listimages:
-             process_image(image)
+              p1 = Process(target=process_image, args=(listimages[0],))
+              p2 = Process(target=process_image, args=(listimages[1],))
+              p3 = Process(target=process_image, args=(listimages[2],))
+             
+              p1.start()
+              p2.start()
+              p3.start()
+        
+              p1.join()
+              p2.join()
+              p3.join()
+               
         elif opcion == "4":
               #En esta opcion cogemos varias imagenes y aplicamos en cada proceso un filtro o cambio al mismo tiempo
               #una vez terminen se guardaran con el filtro aplicado al nombre del archivo
